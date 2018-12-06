@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">GetTaxi_Driver</string>
+    <string name="app_name">GetTaxi Drivers</string>
+    <string name="welcome">Welcome on\nGetTaxi App\nfor Drivers</string>
+    <string name="signIn">Sign-In</string>
+    <string name="signUp">Sign-Up</string>
 </resources>
