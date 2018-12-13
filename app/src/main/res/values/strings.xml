@@ -3,4 +3,15 @@
     <string name="welcome">Welcome on\nGetTaxi App\nfor Drivers</string>
     <string name="signIn">Sign-In</string>
     <string name="signUp">Sign-Up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="cancel">CANCEL</string>
+
+    <!--SignUp-->
+
+    <string name="lastName">Last Name</string>
+    <string name="firstName">First Name</string>
+    <string name="signUp_ID">ID</string>
+    <string name="signUp_phoneNumber">Phone Number</string>
+    <string name="signUp_creditCard">Credit Card</string>
 </resources>
