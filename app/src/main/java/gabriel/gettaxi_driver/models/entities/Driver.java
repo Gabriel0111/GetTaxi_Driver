@@ -1,6 +1,10 @@
 package gabriel.gettaxi_driver.models.entities;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class Driver implements Serializable {
@@ -11,6 +15,11 @@ public class Driver implements Serializable {
     private String phoneNumber;
     private String email;
     private String creditCard;
+    private String emailClient;
+    private String UID;
+
+    @Exclude
+    private List<String> listClient = new LinkedList<>();
 
     //region ***** CONSTRUCTORS *****
 
@@ -89,6 +98,22 @@ public class Driver implements Serializable {
 
     public void setCreditCard(String creditCard) {
         this.creditCard = creditCard;
+    }
+
+    public String getEmailClient() {
+        return emailClient;
+    }
+
+    public void setEmailClient(String emailClient) {
+        this.emailClient = emailClient;
+    }
+
+    public String getUID() {
+        return UID;
+    }
+
+    public void setUID(String UID) {
+        this.UID = UID;
     }
 
     //endregion

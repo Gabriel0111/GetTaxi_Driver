@@ -1,5 +1,7 @@
 package gabriel.gettaxi_driver.models.entities;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.Date;
@@ -8,6 +10,7 @@ import java.util.Random;
 public class ClientRequest implements Serializable {
 
     private String clientName;
+    private String driverID;
     private String phoneNumber;
     private String email;
     private gabriel.gettaxi_driver.models.entities.ClientRequestStatus ClientRequestStatus;
@@ -20,7 +23,12 @@ public class ClientRequest implements Serializable {
     private Date departureTime;
     private Date arrivalTime;
 
-    //private Uri image;
+    // Use to print to screen informations
+    private String travelTime;
+
+    private String travelPrice;
+    @Exclude
+    private double travelDistance;
 
     //region ***** CONSTRUCTORS *****
 
@@ -67,6 +75,14 @@ public class ClientRequest implements Serializable {
 
     public void setClientName(String clientName) {
         this.clientName = clientName;
+    }
+
+    public String getDriverID() {
+        return driverID;
+    }
+
+    public void setDriverID(String driverID) {
+        this.driverID = driverID;
     }
 
     public String getPhoneNumber() {
@@ -157,14 +173,29 @@ public class ClientRequest implements Serializable {
         this.destinationAddress = destinationAddress;
     }
 
-//    @Exclude
-//    public Uri getImage() {
-//        return image;
-//    }
-//
-//    public void setImage(Uri image) {
-//        this.image = image;
-//    }
+    public String getTravelTime() {
+        return travelTime;
+    }
+
+    public void setTravelTime(String travelTime) {
+        this.travelTime = travelTime;
+    }
+
+    public String getTravelPrice() {
+        return travelPrice;
+    }
+
+    public void setTravelPrice(String travelPrice) {
+        this.travelPrice = travelPrice;
+    }
+
+    public double getTravelDistance() {
+        return travelDistance;
+    }
+
+    public void setTravelDistance(double travelDistance) {
+        this.travelDistance = travelDistance;
+    }
 
     //endregion
 

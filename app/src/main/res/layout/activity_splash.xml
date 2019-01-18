@@ -46,24 +46,24 @@
             android:id="@+id/btnSignIn"
             android:text="@string/signIn"
             android:layout_weight="1"
-            android:textSize="18dp"
-            android:layout_marginRight="6dp"
+            android:textSize="18sp"
+            android:layout_marginEnd="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ripple_signin"
-            android:textColor="@color/backgroundDriver"
+            android:textColor="@color/white"
             style="?android:attr/buttonBarButtonStyle" />
 
         <Button
             android:id="@+id/btnSignUp"
             android:text="@string/signUp"
             android:layout_weight="1"
-            android:textSize="18dp"
-            android:layout_marginRight="6dp"
+            android:textSize="18sp"
+            android:layout_marginEnd="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ripple_signup"
-            android:textColor="@color/backgroundDriver"
+            android:textColor="@color/white"
             style="?android:attr/buttonBarButtonStyle" />
 
     </LinearLayout>

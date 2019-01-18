@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +13,13 @@
         android:label="GetTaxi"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppBaseTheme">
+        <activity android:name=".controller.GetTaxiWeb"></activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBFuNRFl9G1TfczjH0ZcrC2-3wwoFYmg3g" />
+
         <activity android:name=".controller.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,6 +27,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".controller.Welcome"
+            android:label="@string/title_activity_welcome"
+            android:theme="@style/AppBaseTheme" />
+
+        <receiver
+            android:name=".controller.MyBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true" >
+
+            <intent-filter>
+                <action android:name="NewOrder" />
+            </intent-filter>
+
+        </receiver>
+
+        <activity
+            android:name=".controller.PresentationClient"
+            android:label="Client"
+            android:theme="@style/AppBaseThemeWithToolbar"></activity>
     </application>
 
 </manifest>

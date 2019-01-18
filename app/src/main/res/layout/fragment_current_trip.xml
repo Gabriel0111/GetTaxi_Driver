@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controller.CurrentTrip"
+    android:id="@+id/fragment_current_trip">
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/presentCurC_nameClient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:padding="20dp"
+                android:text="Name of Client"
+                android:textColor="#333"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <android.support.v7.widget.CardView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="2dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/presentCurC_iconState"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:contentDescription="Client Status"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_trip_awaiting" />
+
+                    <TextView
+                        android:id="@+id/presentCurC_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/presentCurC_iconState"
+                        android:fontFamily="sans-serif"
+                        android:padding="20dp"
+                        android:text="Awaiting"
+                        android:textColor="#333"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/presentCurC_sourceAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:padding="20dp"
+
+                        android:text="Source Address"
+                        android:textColor="#333"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:contentDescription="Client Status"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_present_tobottom" />
+
+                    <TextView
+                        android:id="@+id/presentCurC_destinationAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:padding="20dp"
+
+                        android:text="Destination Address"
+                        android:textColor="#333"
+                        android:textSize="15sp" />
+
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/presentCurC_iconClock"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dp"
+                            android:contentDescription="Client Status"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_present_clock" />
+
+                        <TextView
+                            android:id="@+id/presentCurC_lblTravelTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/presentCurC_iconClock"
+                            android:fontFamily="sans-serif"
+                            android:padding="20dp"
+                            android:text="Travel Time : "
+                            android:textColor="#333"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/presentCurC_travelTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/presentCurC_lblTravelTime"
+                            android:fontFamily="sans-serif"
+                            android:paddingTop="20dp"
+                            android:text="Calcul in progress..."
+                            android:textColor="#333"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="34dp">
+
+                        <TextView
+                            android:id="@+id/presentCurC_lblTravelDistance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/presentCurC_iconClock"
+                            android:fontFamily="sans-serif"
+                            android:padding="20dp"
+                            android:text="Distance : "
+                            android:textColor="#333"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/presentCurC_travelDistance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="24dp"
+                            android:fontFamily="sans-serif"
+                            android:paddingTop="20dp"
+                            android:text="Calcul in progress..."
+                            android:textColor="#333"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center">
+
+                        <TextView
+                            android:id="@+id/presentCurC_departureTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif"
+                            android:padding="20dp"
+                            android:text="16h00"
+                            android:textColor="#333"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:contentDescription="Arrow to"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_present_toright" />
+
+                        <TextView
+                            android:id="@+id/presentCurC_arrivalTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif"
+                            android:padding="20dp"
+                            android:text="18h00"
+                            android:textColor="#333"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="2dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/presentCurC_iconPrice"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:contentDescription="Client Status"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_present_money" />
+
+                    <TextView
+                        android:id="@+id/presentCurC_lblPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@id/presentCurC_iconPrice"
+                        android:fontFamily="sans-serif"
+                        android:padding="20dp"
+                        android:text="Price : "
+                        android:textColor="#333"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/presentCurC_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="25dp"
+                        android:layout_toRightOf="@id/presentCurC_lblPrice"
+                        android:fontFamily="sans-serif"
+                        android:padding="20dp"
+                        android:text="Calcul in progress..."
+                        android:textColor="#333"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:scaleType="fitEnd"
+                android:layout_margin="10sp">
+
+                <Button
+                    android:id="@+id/all_trips_btnCallClient"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:text="Call the client"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5sp"
+                    android:background="@drawable/ripple_validate"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/all_trips_btnEmailClient"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="5sp"
+                    android:background="@drawable/ripple_emailclient"
+                    android:text="Email the client"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>

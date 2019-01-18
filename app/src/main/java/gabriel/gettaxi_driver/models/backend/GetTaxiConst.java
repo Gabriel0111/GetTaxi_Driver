@@ -17,12 +17,18 @@ public class GetTaxiConst
         public static final String SOURCE_LATITUDE = "Source: Latitude";
         public static final String TIME_DEPART = "Departure Time";
         public static final String TIME_ARRIVAL = "Arrival Time";
+
+        public static final String WAITING_CLIENTS = "Waiting Clients";
+        public static final String HISTORY_CLIENTS = "History Clients";
+
     }
 
     public static class DriverConst
     {
         public static final String DRIVERS = "Drivers";
         public static final String DRIVER = "Driver";
+        public static final String CHOSEN_CLIENT = "Chosen Client";
+        public static final String CHOSEN_DRIVER = "Chosen Driver";
 
         public static final String EMAIL = "Email";
         public static final String PASSWORD = "Password";
