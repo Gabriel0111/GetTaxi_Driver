@@ -33,7 +33,7 @@ public class CalculTravelTime extends AsyncTask <Object, Void, Void> {
         destination = clientRequest.getDestinationAddress();
 
         GeoApiContext geoApiContext = new GeoApiContext.Builder()
-                .apiKey("AIzaSyBFuNRFl9G1TfczjH0ZcrC2-3wwoFYmg3g")
+                .apiKey("")
                 .build();
 
         // - Perform the actual request

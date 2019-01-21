@@ -24,6 +24,36 @@ public interface DB_Manager {
     void setClientRequests(ArrayList<ClientRequest> driverList);
     void calculPrice (double distance, ClientRequest clientRequest);
 
+    public void notifyToClientList(final NotifyDataChange<ClientRequest> notifyDataChange);
+
+    public void stopNotifyToClientList();
+
+   // public void notifyToDriverList(final NotifyDataChange<Driver> notifyDataChange);
+
+    public interface NotifyDataChange<T>
+    {
+        void OnDataChanged(T obj);
+
+        void OnDataAdded(T obj);
+
+        void OnFailure(Exception exception);
+    }
+
+    public interface Backend
+    {
+        public void addDriver(Driver d);
+
+        public interface Action<T>
+        {
+            void OnSuccess(T obj);
+
+            void OnProgress(String status,double percent);
+
+            void OnFailure(Exception exception);
+        }
+
+    }
+
 //    public interface Action<T>
 //    {
 //        void onSuccess(T obj);

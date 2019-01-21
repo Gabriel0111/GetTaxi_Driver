@@ -39,6 +39,7 @@ import dmax.dialog.SpotsDialog;
 import gabriel.gettaxi_driver.R;
 import gabriel.gettaxi_driver.models.backend.DB_Manager;
 import gabriel.gettaxi_driver.models.backend.DB_ManagerFactory;
+import gabriel.gettaxi_driver.models.backend.Driver_Service;
 import gabriel.gettaxi_driver.models.backend.GetTaxiConst;
 import gabriel.gettaxi_driver.models.datasource.List_DBManager;
 import gabriel.gettaxi_driver.models.entities.Driver;
@@ -179,6 +180,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Loca
                 .build();
 
         dbManager = DB_ManagerFactory.getDB_Manager();
+        startService(new Intent(getBaseContext(), Driver_Service.class));
     }
 
     //region ***** LOCATION *****

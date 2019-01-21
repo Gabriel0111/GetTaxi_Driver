@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -163,8 +165,65 @@ public class List_DBManager implements DB_Manager {
 //
 //            }
 //        });
+    }
+
+    @Override
+    public void notifyToClientList(final NotifyDataChange<ClientRequest> notifyDataChange)
+    {
+        clientsRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s)
+            {
+                ClientRequest c = dataSnapshot.getValue(ClientRequest.class);
+                clientRequests.add(c);
+                notifyDataChange.OnDataAdded(c);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s)
+            {
+                ClientRequest clientChanged = dataSnapshot.getValue(ClientRequest.class);
+                int i = 0;
+                for (ClientRequest client : clientRequests)
+                {
+                    if(client.getPhoneNumber().equals(clientChanged.getPhoneNumber()))
+                    {
+                        clientRequests.set(i, client);
+                        break;
+                    }
+                    i++;
+                }
+
+                notifyDataChange.OnDataChanged(clientChanged);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                notifyDataChange.OnFailure(databaseError.toException());
+            }
+        });
+    }
+
+    @Override
+    public void stopNotifyToClientList() {
 
     }
+
+//    @Override
+//    public void notifyToDriverList(NotifyDataChange<Driver> notifyDataChange) {
+//
+//    }
 
     //region OTHERS
 
@@ -189,6 +248,8 @@ public class List_DBManager implements DB_Manager {
 
         return result;
     }
+
+
 
     @Override
     public void addDriver(Driver driver) {}

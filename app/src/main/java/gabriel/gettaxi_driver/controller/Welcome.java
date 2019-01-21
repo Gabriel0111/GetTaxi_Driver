@@ -42,6 +42,7 @@ import java.util.List;
 import gabriel.gettaxi_driver.R;
 import gabriel.gettaxi_driver.models.backend.DB_Manager;
 import gabriel.gettaxi_driver.models.backend.DB_ManagerFactory;
+import gabriel.gettaxi_driver.models.backend.Driver_Service;
 import gabriel.gettaxi_driver.models.backend.GetTaxiConst;
 import gabriel.gettaxi_driver.models.datasource.List_DBManager;
 import gabriel.gettaxi_driver.models.entities.Driver;
@@ -61,6 +62,7 @@ public class Welcome extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         initializesFont();
         setContentView(R.layout.activity_welcome);

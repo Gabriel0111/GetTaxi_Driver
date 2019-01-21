@@ -11,6 +11,7 @@ public class GetTaxiConst
         public static final String PHONE_NUMBER = "Phone Number";
         public static final String EMAIL = "Email";
         public static final String STATUS = "Status";
+        public static final String DESTINATION = "Destination";
         public static final String DESTINATION_LONGITUDE = "Destination: Longitude";
         public static final String DESTINATION_LATITUDE = "Destination: Latitude";
         public static final String SOURCE_LONGITUDE = "Source: Longitude";
