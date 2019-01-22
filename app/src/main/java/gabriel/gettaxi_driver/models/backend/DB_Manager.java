@@ -25,8 +25,9 @@ public interface DB_Manager {
     void calculPrice (double distance, ClientRequest clientRequest);
 
     public void notifyToClientList(final NotifyDataChange<ClientRequest> notifyDataChange);
-
     public void stopNotifyToClientList();
+
+    public void refreshLists();
 
    // public void notifyToDriverList(final NotifyDataChange<Driver> notifyDataChange);
 

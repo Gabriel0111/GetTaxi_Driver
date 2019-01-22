@@ -3,6 +3,7 @@ package gabriel.gettaxi_driver.controller;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -48,8 +49,11 @@ public class PresentationClient extends AppCompatActivity implements View.OnClic
 
     private Button btnCallClient;
     private Button btnEmailClient;
+    private Button btnEndTrip;
+    private Button btnAddToContact;
 
     private Drawable iconInTreatment;
+    private Drawable iconEnded;
     private ImageView clientIconStatus;
 
     private Toolbar toolbar;
@@ -104,12 +108,14 @@ public class PresentationClient extends AppCompatActivity implements View.OnClic
         TextView clientTravelPrice = findViewById(R.id.presentC_price);
                  btnCallClient = findViewById(R.id.all_trips_btnCallClient);
                  btnEmailClient = findViewById(R.id.all_trips_btnEmailClient);
+                 btnEndTrip = findViewById(R.id.all_trips_btnEndTrip);
+                 btnAddToContact = findViewById(R.id.all_trips_btnAddToContact);
 
         toolbar = findViewById(R.id.toolbar);
 
         Drawable iconAwaiting = getResources().getDrawable(R.drawable.ic_trip_awaiting);
-        iconInTreatment = getResources().getDrawable(R.drawable.ic_trip_treatment);;
-        Drawable iconEnded = getResources().getDrawable(R.drawable.ic_trip_ended);
+        iconInTreatment = getResources().getDrawable(R.drawable.ic_trip_treatment);
+        iconEnded = getResources().getDrawable(R.drawable.ic_trip_ended);
 
         clientName.setText(chosenClientRequest.getClientName());
         clientSourceAddress.setText(chosenClientRequest.getSourceAddress());
@@ -118,11 +124,15 @@ public class PresentationClient extends AppCompatActivity implements View.OnClic
         clientArrivalTime.setText(getStringTime(chosenClientRequest.getArrivalTime()));
         btnCallClient.setOnClickListener(this);
         btnEmailClient.setOnClickListener(this);
+        btnEndTrip.setOnClickListener(this);
+        btnAddToContact.setOnClickListener(this);
 
         if (chosenClientRequest.getClientRequestStatus() == ClientRequestStatus.AWAITING)
         {
             btnCallClient.setVisibility(View.INVISIBLE);
             btnEmailClient.setVisibility(View.INVISIBLE);
+            btnEndTrip.setVisibility(View.INVISIBLE);
+            btnAddToContact.setVisibility(View.INVISIBLE);
         }
 
         switch (chosenClientRequest.getClientRequestStatus())
@@ -180,6 +190,27 @@ public class PresentationClient extends AppCompatActivity implements View.OnClic
                     .putExtra(Intent.EXTRA_TEXT, body);
             startActivity(Intent.createChooser(intent, "Send Email"));
         }
+        else if (v == btnEndTrip)
+        {
+            List_DBManager.currentClient = chosenClientRequest;
+            chosenClientRequest.setClientRequestStatus(ClientRequestStatus.ENDED);
+
+            DatabaseReference changedClient = FirebaseDatabase.getInstance().getReference(GetTaxiConst.ClientConst.CLIENTS + "/" + chosenClientRequest.getPhoneNumber());
+            changedClient.setValue(chosenClientRequest).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    createSimpleAlertDialog("You ended the trip of " + chosenClientRequest.getClientName());
+                }
+            });
+
+            clientStatus.setText("Ended");
+            clientIconStatus.setImageDrawable(iconEnded);
+
+            btnCallClient.setVisibility(View.INVISIBLE);
+            btnEmailClient.setVisibility(View.INVISIBLE);
+            btnEndTrip.setVisibility(View.INVISIBLE);
+            btnAddToContact.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void createSimpleAlertDialog(String message)
@@ -187,7 +218,12 @@ public class PresentationClient extends AppCompatActivity implements View.OnClic
         AlertDialog.Builder creationOK = new AlertDialog.Builder(PresentationClient.this);
         creationOK.setTitle(R.string.app_name);
         creationOK.setMessage(message);
-        creationOK.setPositiveButton("OK", null);
+        creationOK.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                PresentationClient.this.finish();
+            }
+        });
         creationOK.show();
     }
 
@@ -213,6 +249,8 @@ public class PresentationClient extends AppCompatActivity implements View.OnClic
 
             btnCallClient.setVisibility(View.VISIBLE);
             btnEmailClient.setVisibility(View.VISIBLE);
+            btnEndTrip.setVisibility(View.VISIBLE);
+            btnAddToContact.setVisibility(View.VISIBLE);
 
             sendConfirmationSMS();
         }

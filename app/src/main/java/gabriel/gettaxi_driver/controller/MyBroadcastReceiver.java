@@ -1,6 +1,5 @@
 package gabriel.gettaxi_driver.controller;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -22,7 +21,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        final String NOTIFICATION_CHANNEL_ID = "Notification Channel #1";
+        final String NOTIFICATION_CHANNEL_ID = "NewOrder";
         Random r = new Random();
 
         NotificationChannel notificationChannel;
@@ -46,13 +45,12 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 
         final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
 
-
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.icon_driver)
-                .setContentTitle("New Client")
-                .setContentText("A new trip is available for you!\nDestination: " + destinationClient)
+                .setContentTitle("New Trip Available")
+                .setContentText("Destination: " + destinationClient)
                 .setDefaults(Notification.DEFAULT_LIGHTS)
                 .setContentIntent(contentIntent)
                 .setContentInfo("Info");

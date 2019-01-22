@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import gabriel.gettaxi_driver.controller.AllTrips;
 import gabriel.gettaxi_driver.controller.MainActivity;
 import gabriel.gettaxi_driver.models.backend.DB_Manager;
 import gabriel.gettaxi_driver.models.backend.GetTaxiConst;
@@ -79,35 +80,6 @@ public class List_DBManager implements DB_Manager {
             }
         });
 
-        // Je recopierai cette fonction dans le Notify... (ce qui sert aux notifs)
-//        driversRef.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                drivers.add(dataSnapshot.getValue(Driver.class));
-//                //TODO enter here the function about the notification
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
         clientsRef.addValueEventListener(new ValueEventListener() {
             @SuppressLint("NewApi")
             @Override
@@ -131,46 +103,17 @@ public class List_DBManager implements DB_Manager {
             }
         });
 
-        // idem
-//        clientsRef.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//                ClientRequest c = dataSnapshot.getValue(ClientRequest.class);
-//                clientRequests.add(c);
-//                initializeLists();
-////                calculDistance(c);
-////                calculPrice(c.getTravelDistance(), c);
-//
-//
-//                //TODO enter here the function about the notification
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+    }
+
+    @Override
+    public void refreshLists() {
+        initializeLists();
     }
 
     @Override
     public void notifyToClientList(final NotifyDataChange<ClientRequest> notifyDataChange)
     {
-        clientsRef.addChildEventListener(new ChildEventListener() {
+        clientsRef.startAt(Calendar.getInstance().getTime().getTime()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s)
             {

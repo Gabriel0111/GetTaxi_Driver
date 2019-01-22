@@ -21,7 +21,6 @@ public class GetTaxiConst
 
         public static final String WAITING_CLIENTS = "Waiting Clients";
         public static final String HISTORY_CLIENTS = "History Clients";
-
     }
 
     public static class DriverConst
@@ -33,6 +32,8 @@ public class GetTaxiConst
 
         public static final String EMAIL = "Email";
         public static final String PASSWORD = "Password";
+
+        public static final String NEW_ORDER = "New Order";
     }
 
 

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -180,7 +181,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Loca
                 .build();
 
         dbManager = DB_ManagerFactory.getDB_Manager();
-        startService(new Intent(getBaseContext(), Driver_Service.class));
     }
 
     //region ***** LOCATION *****

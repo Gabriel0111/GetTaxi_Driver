@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -99,6 +100,14 @@ public class Welcome extends AppCompatActivity
         emailCurrentDriver.setText(currentDriver.getEmail());
         TextView nameCurrentDriver = headerEmail.findViewById(R.id.nav_header_lblNameDriver);
         nameCurrentDriver.setText(currentDriver.getFirstName() + " " + currentDriver.getLastName());
+
+
+
+        registerReceiver(
+                new MyBroadcastReceiver(),
+                new IntentFilter(GetTaxiConst.DriverConst.NEW_ORDER));
+
+        startService(new Intent(getBaseContext(), Driver_Service.class));
     }
 
 

@@ -30,7 +30,12 @@
         <activity
             android:name=".controller.Welcome"
             android:label="@string/title_activity_welcome"
-            android:theme="@style/AppBaseTheme" />
+            android:theme="@style/AppBaseTheme">
+
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_TICK"/>
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name=".controller.MyBroadcastReceiver"
@@ -40,13 +45,15 @@
             <intent-filter>
                 <action android:name="NewOrder" />
             </intent-filter>
-
         </receiver>
+
 
         <activity
             android:name=".controller.PresentationClient"
             android:label="Client"
             android:theme="@style/AppBaseThemeWithToolbar"></activity>
+
+        <service android:name=".models.backend.Driver_Service" />
     </application>
 
 </manifest>
