@@ -10,4 +10,68 @@
     tools:context=".controller.Welcome"
     tools:showIn="@layout/app_bar_welcome">
 
+    <!--<android.support.v7.widget.CardView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_margin="5dp"-->
+    <!--app:cardBackgroundColor="@android:color/white"-->
+    <!--app:cardCornerRadius="2dp"-->
+    <!--app:cardElevation="2dp">-->
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_marginTop="50dp"-->
+            <!--android:layout_marginBottom="50dp"-->
+            <!--android:gravity="center">-->
+
+            <!--&lt;!&ndash; Les CardView agissent comme des FrameLayout,-->
+             <!--pour avoir une organisation verticale nous devons-->
+             <!--donc rajouter un LinearLayout &ndash;&gt;-->
+
+
+
+
+            <!--<TextView-->
+                <!--android:id="@+id/welcome_name"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:padding="20dp"-->
+                <!--tools:text="Hello"-->
+                <!--android:fontFamily="sans-serif"-->
+                <!--android:textColor="#333"-->
+                <!--android:textSize="20sp"-->
+                <!--android:textStyle="bold"/>-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/welcome_message"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@id/welcome_name"-->
+                <!--android:padding="20dp"-->
+                <!--tools:text="Hello"-->
+                <!--android:fontFamily="sans-serif"-->
+                <!--android:textColor="#333"-->
+                <!--android:textSize="20sp"/>-->
+
+
+            <!--<TextView-->
+                <!--android:id="@+id/welcome_price"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@id/welcome_message"-->
+                <!--android:padding="20dp"-->
+                <!--android:text="5000"-->
+                <!--android:fontFamily="sans-serif"-->
+                <!--android:textColor="#333"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textSize="20sp"/>-->
+
+
+        <!--</RelativeLayout>-->
+
+
+    <!--</android.support.v7.widget.CardView>-->
+
 </RelativeLayout>

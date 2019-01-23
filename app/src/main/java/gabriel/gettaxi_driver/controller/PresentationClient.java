@@ -2,13 +2,18 @@ package gabriel.gettaxi_driver.controller;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.OperationApplicationException;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.RemoteException;
+import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -17,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +35,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import gabriel.gettaxi_driver.R;
@@ -58,6 +66,8 @@ public class PresentationClient extends AppCompatActivity implements View.OnClic
 
     private Toolbar toolbar;
 
+    ContentProvider contentProvider;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (chosenClientRequest.getClientRequestStatus() == ClientRequestStatus.AWAITING)
@@ -68,10 +78,11 @@ public class PresentationClient extends AppCompatActivity implements View.OnClic
        return super.onCreateOptionsMenu(menu);
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getActionBar().setDisplayHomeAsUpEnabled(false);
 
         initializesFont();
         setContentView(R.layout.activity_presentation_client);
@@ -91,6 +102,7 @@ public class PresentationClient extends AppCompatActivity implements View.OnClic
                 .build());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     void findViews()
     {
         Bundle bundle = getIntent().getExtras();
@@ -111,6 +123,10 @@ public class PresentationClient extends AppCompatActivity implements View.OnClic
                  btnEndTrip = findViewById(R.id.all_trips_btnEndTrip);
                  btnAddToContact = findViewById(R.id.all_trips_btnAddToContact);
 
+                 contentProvider = new ContentProvider();
+
+        contentProvider.AccessContact();
+
         toolbar = findViewById(R.id.toolbar);
 
         Drawable iconAwaiting = getResources().getDrawable(R.drawable.ic_trip_awaiting);
@@ -127,7 +143,8 @@ public class PresentationClient extends AppCompatActivity implements View.OnClic
         btnEndTrip.setOnClickListener(this);
         btnAddToContact.setOnClickListener(this);
 
-        if (chosenClientRequest.getClientRequestStatus() == ClientRequestStatus.AWAITING)
+        if (chosenClientRequest.getClientRequestStatus() == ClientRequestStatus.AWAITING
+            || chosenClientRequest.getClientRequestStatus() == ClientRequestStatus.ENDED)
         {
             btnCallClient.setVisibility(View.INVISIBLE);
             btnEmailClient.setVisibility(View.INVISIBLE);
@@ -183,8 +200,8 @@ public class PresentationClient extends AppCompatActivity implements View.OnClic
             String body = "Hello " + currentClient.getClientName() + " I'm " +
                     List_DBManager.currentDriver.getFirstName() + " " +  List_DBManager.currentDriver.getLastName() + '\n' +
                     "I'ld like to tell you something:\n";
-            intent = new Intent(Intent.ACTION_SENDTO)
-                    .setType("text/plain")
+            intent = new Intent(Intent.ACTION_SEND)
+                    .setType("message/rfc822")
                     .putExtra(Intent.EXTRA_EMAIL, currentClient.getEmail())
                     .putExtra(Intent.EXTRA_SUBJECT, "Your Travel with GetTaxi")
                     .putExtra(Intent.EXTRA_TEXT, body);
@@ -210,6 +227,10 @@ public class PresentationClient extends AppCompatActivity implements View.OnClic
             btnEmailClient.setVisibility(View.INVISIBLE);
             btnEndTrip.setVisibility(View.INVISIBLE);
             btnAddToContact.setVisibility(View.INVISIBLE);
+        }
+        else if (v == btnAddToContact)
+        {
+           contentProvider.SaveContact();
         }
     }
 
@@ -277,6 +298,159 @@ public class PresentationClient extends AppCompatActivity implements View.OnClic
             ActivityCompat.requestPermissions((Activity) PresentationClient.this, new String[]{Manifest.permission.SEND_SMS},0);
         }
     }
+
+    public class ContentProvider {
+
+        final static String LOG_TAG = "GabrielTag";
+        final private int REQUEST_MULTIPLE_PERMISSIONS = 124;
+
+        public void SaveContact() {
+
+            //https://developer.android.com/reference/android/provider/ContactsContract.RawContacts
+            ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+            int rawContactInsertIndex = ops.size();
+
+            ops.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
+                    .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                    .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
+                    .build());
+            //INSERT NAME
+            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID,rawContactInsertIndex)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, chosenClientRequest.getClientName()) // Name of the person
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME, chosenClientRequest.getClientName()) // Name of the person
+                    .build());
+            //INSERT MOBILE
+            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID,   rawContactInsertIndex)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, chosenClientRequest.getPhoneNumber()) // Number of the person
+                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                    .build()); //
+        /*//INSERT FAX
+        ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID,   rawContactInsertIndex)
+                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, szFax)
+                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK)
+                .build()); //*/
+            //INSERT EMAIL
+            ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID,   rawContactInsertIndex)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Email.DATA, chosenClientRequest.getEmail())
+                    .withValue(ContactsContract.CommonDataKinds.Email.TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK)
+                    .build()); //
+      /*//INSERT ADDRESS: FULL, STREET, CITY, REGION, POSTCODE, COUNTRY
+        ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)
+                .withValue(ContactsContract.Data.MIMETYPE,ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_ITEM_TYPE)
+                .withValue(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS, m_szAddress)
+                .withValue(ContactsContract.CommonDataKinds.StructuredPostal.TYPE, ContactsContract.CommonDataKinds.StructuredPostal.TYPE_WORK)
+                .withValue(ContactsContract.CommonDataKinds.StructuredPostal.STREET, m_szStreet)
+                .withValue(ContactsContract.CommonDataKinds.StructuredPostal.CITY, m_szCity)
+                .withValue(ContactsContract.CommonDataKinds.StructuredPostal.REGION, m_szState)
+                .withValue(ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE, m_szZip)
+                .withValue(ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY, m_szCountry)
+                //.withValue(StructuredPostal.TYPE, StructuredPostal.TYPE_WORK)
+                .build());*/
+        //INSERT NOTE
+        ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID,   rawContactInsertIndex)
+                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE)
+                .withValue(ContactsContract.CommonDataKinds.Note.NOTE, "Created by GetTaxi App (c)")
+                .build()); //
+            //Add a custom colomn to identify this contact
+        /*ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID,   rawContactInsertIndex)
+                .withValue(ContactsContract.Data.MIMETYPE, MIMETYPE_RADUTOKEN)
+                .withValue(ContactsContract.Data.DATA1, szToken)
+                .build());*/
+            //INSERT imAGE
+        /*ops.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, rawContactInsertIndex)
+                .withValue(ContactsContract.Data.MIMETYPE,ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE)
+                .withValue(ContactsContract.CommonDataKinds.Photo.PHOTO,
+                        stream.toByteArray())
+                .build());*/
+            // SAVE CONTACT IN BCR Structure
+            Uri newContactUri = null;
+            //PUSH EVERYTHING TO CONTACTS
+            try
+            {
+                ContentProviderResult[] res = getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+                if (res[0] != null)
+                {
+                    newContactUri = res[0].uri;
+                    //02-20 22:21:09 URI added contact:content://com.android.contacts/raw_contacts/612
+                    Log.d(LOG_TAG, "URI added contact:"+ newContactUri);
+                    showMessageOKCancel(chosenClientRequest.getClientName() + " has been saved in you Contacts", null);
+                }
+                else Log.e(LOG_TAG, "Contact not added.");
+            }
+            catch (RemoteException e)
+            {
+                // error
+                Log.e(LOG_TAG, "Error (1) adding contact.");
+                newContactUri = null;
+            }
+            catch (OperationApplicationException e)
+            {
+                // error
+                Log.e(LOG_TAG, "Error (2) adding contact.");
+                newContactUri = null;
+            }
+            Log.d(LOG_TAG, "Contact added to system contacts.");
+
+            if (newContactUri == null) {
+                Log.e(LOG_TAG, "Error creating contact");
+
+            }
+        }
+        /* From Android 6.0 Marshmallow,
+        the application will not be granted any permissions at installation time.
+        Instead, the application has to ask the user for permissions one-by-one at runtime
+        with an alert message. The developer has to call for it manually.*/
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        private void AccessContact()
+        {
+            List<String> permissionsNeeded = new ArrayList<String>();
+            final List<String> permissionsList = new ArrayList<String>();
+            if (!addPermission(permissionsList, Manifest.permission.READ_CONTACTS))
+                permissionsNeeded.add("Read Contacts");
+            if (!addPermission(permissionsList, Manifest.permission.WRITE_CONTACTS))
+                permissionsNeeded.add("Write Contacts");
+            if (permissionsList.size() > 0) {
+                if (permissionsNeeded.size() > 0) {
+                    requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                            REQUEST_MULTIPLE_PERMISSIONS);
+                }
+                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                        REQUEST_MULTIPLE_PERMISSIONS);
+            }
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        private boolean addPermission(List<String> permissionsList, String permission) {
+            if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionsList.add(permission);
+
+                if (!shouldShowRequestPermissionRationale(permission))
+                    return false;
+            }
+            return true;
+        }
+
+        private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+            new android.app.AlertDialog.Builder(PresentationClient.this)
+                    .setMessage(message)
+                    .setPositiveButton("OK", okListener)
+                    .create()
+                    .show();
+        }
+    }
+
 
 }
 

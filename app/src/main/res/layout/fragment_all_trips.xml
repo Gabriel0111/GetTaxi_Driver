@@ -20,46 +20,43 @@
         android:id="@+id/all_trips_pgb"
         android:minWidth="100dp" />
 
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="10dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/all_trips_filterTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:hint="Enter a destination address"
-                android:inputType="textPostalAddress"
-                android:text=""
-                android:textColor="@color/colorPrimary"
-                android:layout_marginLeft="20dp"
-
-                app:met_baseColor="@color/colorPrimary"
-                app:met_floatingLabel="highlight"
-                app:met_primaryColor="@color/colorPrimary" />
-
-            <Spinner
-                android:id="@+id/allTrips_Spinner"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/all_trips_filterTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:hint="Enter a destination address"
+                    android:inputType="textPostalAddress"
+                    android:text=""
+                    android:textColor="@color/colorPrimary"
+                    android:layout_marginLeft="20dp"
+
+                    app:met_baseColor="@color/colorPrimary"
+                    app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/colorPrimary" />
+
+                <Spinner
+                    android:id="@+id/allTrips_Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"/>
+            </LinearLayout>
+
+
+            <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/recyclerViewAllTrips"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
         </LinearLayout>
-
-
-        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/recyclerViewAllTrips"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-
 </FrameLayout>

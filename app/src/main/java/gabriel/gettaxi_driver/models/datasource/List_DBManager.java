@@ -48,6 +48,9 @@ public class List_DBManager implements DB_Manager {
 
     public static String modeList = "";
 
+    /**
+     * In the constructor, initializes now the lists
+     */
     public List_DBManager()
     {
         drivers = new ArrayList<>();
@@ -66,8 +69,8 @@ public class List_DBManager implements DB_Manager {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 drivers.clear();
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for (DataSnapshot child: children) {
                     Driver d = child.getValue(Driver.class);
                     drivers.add(d);
@@ -113,7 +116,7 @@ public class List_DBManager implements DB_Manager {
     @Override
     public void notifyToClientList(final NotifyDataChange<ClientRequest> notifyDataChange)
     {
-        clientsRef.startAt(Calendar.getInstance().getTime().getTime()).addChildEventListener(new ChildEventListener() {
+        clientsRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s)
             {
@@ -163,11 +166,6 @@ public class List_DBManager implements DB_Manager {
 
     }
 
-//    @Override
-//    public void notifyToDriverList(NotifyDataChange<Driver> notifyDataChange) {
-//
-//    }
-
     //region OTHERS
 
     public Driver getCurrentDriver()
@@ -192,7 +190,17 @@ public class List_DBManager implements DB_Manager {
         return result;
     }
 
+    @Override
+    public int getEarnDriver() {
+        int earn = 0;
+        for (ClientRequest c : clientRequests)
+        {
+            if (c.getClientRequestStatus() == ClientRequestStatus.ENDED && c.getDriverID().equals(currentDriver.getId()))
+                earn += Double.valueOf(c.getTravelPrice());
+        }
 
+        return earn;
+    }
 
     @Override
     public void addDriver(Driver driver) {}

@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
+
+import java.util.Calendar;
 
 import dmax.dialog.SpotsDialog;
 import gabriel.gettaxi_driver.R;
@@ -97,13 +100,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Loca
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMS_CALL_ID)
-            askPermission();
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -114,22 +110,28 @@ public class MainActivity extends Activity implements View.OnClickListener, Loca
         initializesViewsVariables();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMS_CALL_ID)
+            askPermission();
+    }
+
+    /**
+     * Fonction ici : https://www.youtube.com/watch?v=uOKLUu1Jjco
+     */
     private void askPermission()
     {
         if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]
-                            {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.VIBRATE,
-                                    Manifest.permission.CALL_PHONE, Manifest.permission.SEND_SMS}, PERMS_CALL_ID);
-        }
-
-        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.VIBRATE) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]
-                    {Manifest.permission.CALL_PHONE, Manifest.permission.SEND_SMS, Manifest.permission.VIBRATE}, PERMS_CALL_ID);
+                            {Manifest.permission.ACCESS_COARSE_LOCATION,
+                                    Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.CALL_PHONE,
+                                    Manifest.permission.SEND_SMS}, PERMS_CALL_ID);
         }
 
         lm = (LocationManager)  getSystemService(LOCATION_SERVICE);
@@ -209,7 +211,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Loca
 
     //region ***** CLASSES SIGNIN SIGNOUT *****
 
-    public class SignIn
+    private class SignIn
     {
         void findViewSignIn(View registerLayout)
         {
@@ -218,6 +220,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Loca
             stayConnected = registerLayout.findViewById(R.id.signIn_chkStayConnected);
         }
 
+        //Inspired by this video : https://www.youtube.com/watch?v=DvFPQBHfGzs
         private void showSignInDialog()
         {
             AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
@@ -329,27 +332,27 @@ public class MainActivity extends Activity implements View.OnClickListener, Loca
                             @Override
                             public void onSuccess(AuthResult authResult) {
 
-                                drivers.child(auth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        Driver driver = dataSnapshot.getValue(Driver.class);
-                                        Intent intent = new Intent(MainActivity.this, Welcome.class);
+                            drivers.child(auth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    Driver driver = dataSnapshot.getValue(Driver.class);
+                                    Intent intent = new Intent(MainActivity.this, Welcome.class);
 
-                                        List_DBManager.currentDriver = driver;
+                                    List_DBManager.currentDriver = driver;
 
-                                        saveInSharedPreferences();
+                                    saveInSharedPreferences();
 
-                                        startActivity(intent);
-                                        waitingSpots.dismiss();
-                                        //TODO***** ACHTÜNG FINISH ****
-                                        finish();
-                                    }
+                                    startActivity(intent);
+                                    waitingSpots.dismiss();
+                                    //TODO***** ACHTÜNG FINISH ****
+                                    finish();
+                                }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                    }
-                                });
+                                }
+                            });
 
                             }
                         })
@@ -357,34 +360,34 @@ public class MainActivity extends Activity implements View.OnClickListener, Loca
                             @Override
                             public void onFailure(@NonNull Exception e) {
 
-                                waitingSpots.dismiss();
+                            waitingSpots.dismiss();
 
-                                final AlertDialog.Builder dialogToSignUp = new AlertDialog.Builder(MainActivity.this);
-                                dialogToSignUp
-                                        .setTitle(R.string.app_name)
+                            final AlertDialog.Builder dialogToSignUp = new AlertDialog.Builder(MainActivity.this);
+                            dialogToSignUp
+                                    .setTitle(R.string.app_name)
 
-                                        .setMessage("Ooooppps! It seams that you haven't got any account. Let's create it")
-                                        .setPositiveButton("CREATE IT", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                                signUp.showSignUpDialog();
-                                            }
-                                        })
-                                        .setNegativeButton("NOT NOW", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                dialogToSignUp.create().show();
+                                    .setMessage("Ooooppps! It seams that you haven't got any account. Let's create it")
+                                    .setPositiveButton("CREATE IT", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                            signUp.showSignUpDialog();
+                                        }
+                                    })
+                                    .setNegativeButton("NOT NOW", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            dialogToSignUp.create().show();
                             }
                         });
             }
         }
     }
 
-    public class SignUp
+    private class SignUp
     {
         private void showSignUpDialog()
         {
@@ -584,7 +587,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Loca
 
     //endregion
 
-    //region ***** SAVE / RETRIEVE DATA INTO SHAREDPREFERENCES *****
+    //region ***** SAVE / RETRIEVE DATA INTO SHARED_PREFERENCES *****
 
     private void saveInSharedPreferences() {
         spEditor.putString(GetTaxiConst.DriverConst.EMAIL, edtEmail.getText().toString());
@@ -630,5 +633,4 @@ public class MainActivity extends Activity implements View.OnClickListener, Loca
     }
 
     //endregion
-
 }

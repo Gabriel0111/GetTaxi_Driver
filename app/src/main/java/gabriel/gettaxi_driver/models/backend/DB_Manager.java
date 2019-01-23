@@ -23,13 +23,12 @@ public interface DB_Manager {
     List<ClientRequest> getHistoryClients();
     void setClientRequests(ArrayList<ClientRequest> driverList);
     void calculPrice (double distance, ClientRequest clientRequest);
+    int getEarnDriver();
 
     public void notifyToClientList(final NotifyDataChange<ClientRequest> notifyDataChange);
     public void stopNotifyToClientList();
 
     public void refreshLists();
-
-   // public void notifyToDriverList(final NotifyDataChange<Driver> notifyDataChange);
 
     public interface NotifyDataChange<T>
     {
@@ -55,16 +54,4 @@ public interface DB_Manager {
 
     }
 
-//    public interface Action<T>
-//    {
-//        void onSuccess(T obj);
-//        void onFailure(Exception exception);
-//        void onProgress(String status, double percent);
-//    }
-//
-//    public interface NotifyDataChange<T>
-//    {
-//        void OnDataChanged(T obj);
-//        void onFailure(Exception exception);
-//    }
 }

@@ -21,6 +21,9 @@ import gabriel.gettaxi_driver.models.entities.ClientRequest;
 
 public class CalculTravelTime extends AsyncTask <Object, Void, Void> {
 
+    /**
+     * The function calcules the waiting time and update the view (so that I used object parameters)
+     */
     @Override
     protected Void doInBackground(Object... objects) {
 
@@ -70,11 +73,5 @@ public class CalculTravelTime extends AsyncTask <Object, Void, Void> {
         textView.setText(duration.humanReadable);
 
         return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-
     }
 }
